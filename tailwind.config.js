@@ -2,12 +2,15 @@
 module.exports = {
   content: [
     "./templates/**/*.html",
-    "./static/src/**/*.js"
+    "./static/src/**/*.js",
+    "./node_modules/flowbite/**/*.js"
   ],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require("flowbite/plugin"),
+  ],
   theme: {
     colors: {
       dracula: '#D30C7B',
