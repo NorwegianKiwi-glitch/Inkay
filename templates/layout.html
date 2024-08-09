@@ -10,7 +10,7 @@
     </head>
     <body>
         <!-- Navbar -->
-        <nav class="bg-dracula border-blue-600 px-2 sm:px-4 py-2.5 rounded">
+        <nav class="bg-dracula border-blue-600 px-2 sm:px-4 py-2.5">
             <div class="container flex flex-wrap justify-between items-center mx-auto">
             <a href="#" class="flex">
                 <img
@@ -40,10 +40,15 @@
         </nav>
 
         <div class="mx-8 mt-6">
-        
             {% block body %} {% endblock %}
-
         </div>
+
+        <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4">
+            <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+                <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+                <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="https://github.com/NorwegianKiwi-glitch" class="hover:underline">Gaymer Gang Shelgen</a></span>
+            </div>
+        </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 

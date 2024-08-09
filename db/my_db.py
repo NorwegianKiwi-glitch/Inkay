@@ -1,23 +1,31 @@
-# db/my_db.py
 import sqlite3
+import os
 
 def create_connection():
-    conn = sqlite3.connect('notater.db')
+    # Using absolute path to avoid path issues
+    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../instance/notater.db'))
+    
+    # Ensure the directory exists
+    if not os.path.exists(os.path.dirname(db_path)):
+        os.makedirs(os.path.dirname(db_path))
+
+    conn = sqlite3.connect(db_path)
     return conn
 
 def create_table():
     conn = create_connection()
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS notater (
+                header TEXT,
                 notat TEXT
         )""")
     conn.commit()
     conn.close()
 
-def insert_notat(notat):
+def insert_notat(header, notat):
     conn = create_connection()
     c = conn.cursor()
-    c.execute("INSERT INTO notater (notat) VALUES (?)", (notat,))
+    c.execute("INSERT INTO notater (header, notat) VALUES (?, ?)", (header, notat))
     conn.commit()
     conn.close()
 
