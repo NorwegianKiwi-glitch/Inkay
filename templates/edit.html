@@ -1,0 +1,39 @@
+<!-- templates/edit.html -->
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <h2>Dine notater</h2>
+    <ul>
+        {% for header in headers %}
+            <li><a href="{{ url_for('edit', id=header[0]) }}" class="hover:bg-blue-700">{{ header[1] }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="max-w-sm mx-auto">
+        <form action="{{ url_for('edit', id=notat_data[0]) }}" class="max-w-sm mx-auto" method="post">
+            <input autocomplete="off" name="header" placeholder="Header" type="text" value="{{ notat_data[1] }}">
+            <textarea name="notat" placeholder="Edit your note here..." rows="4" cols="50">{{ notat_data[2] }}</textarea>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save Changes</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Back to list</a>
+
+        <!-- Delete button -->
+        <form action="{{ url_for('delete', id=notat_data[0]) }}" method="post" style="margin-top: 10px;">
+            <button type="submit" class="text-white bg-dracula hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Delete</button>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+    </div>
+
+{% endblock %}
