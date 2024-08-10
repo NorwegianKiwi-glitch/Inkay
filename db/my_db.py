@@ -1,11 +1,10 @@
+# db/my_db.py
 import sqlite3
 import os
 
 def create_connection():
-    # Using absolute path to avoid path issues
     db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../instance/notater.db'))
     
-    # Ensure the directory exists
     if not os.path.exists(os.path.dirname(db_path)):
         os.makedirs(os.path.dirname(db_path))
 
@@ -29,6 +28,13 @@ def insert_notat(header, notat):
     conn.commit()
     conn.close()
 
-# Initialize the database
+def get_all_headers():
+    conn = create_connection()
+    c = conn.cursor()
+    c.execute("SELECT header FROM notater")
+    headers = c.fetchall()
+    conn.close()
+    return headers
+
 if __name__ == "__main__":
     create_table()

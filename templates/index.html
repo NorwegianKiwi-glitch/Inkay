@@ -2,6 +2,13 @@
 
 {% block body %}
 
+    <h2>Dine notater</h2>
+    <ul>
+        {% for header in headers %}
+            <li>{{ header[0] }}</li>
+        {% endfor %}
+    </ul>
+
     <div>
         <form action="/" class="max-w-sm mx-auto" method="post">
             <input autocomplete="off" autofocus name="header" placeholder="Header" type="text">
