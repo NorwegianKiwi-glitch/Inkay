@@ -1,7 +1,6 @@
-# app.py
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from db.my_db import create_user, get_user_by_username, check_user_password, create_table, insert_notat, create_table, get_all_headers, get_notat_by_id, update_notat, delete_notat
+from db.my_db import create_user, get_user_by_username, check_user_password, create_table, insert_notat, create_table, get_all_headers, get_notat_by_id, update_notat, delete_notat, check_password_hash, create_connection
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Required for flash messages
@@ -13,6 +12,7 @@ create_table()
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+# login_manager.debug = True  # Enable debug mode
 
 class User(UserMixin):
     def __init__(self, id, username):
@@ -26,12 +26,29 @@ class User(UserMixin):
             return User(user[0], user[1])
         return None
 
+    def get_id(self):
+        return str(self.id)  # Ensure this returns the user ID as a string
+
+def check_user_password(username, password):
+    user = get_user_by_username(username)
+    if user and check_password_hash(user[2], password):
+        return user
+    return None
+
 @login_manager.user_loader
 def load_user(user_id):
-    user = get_user_by_username(user_id)
+    print(f"Loading user with ID: {user_id}")
+    conn = create_connection()
+    c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    user = c.fetchone()
+    conn.close()
     if user:
+        print(f"User found: {user}")
         return User(user[0], user[1])
+    print("No user found")
     return None
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -41,9 +58,11 @@ def register():
         result = create_user(username, password)
         if result == "User created successfully.":
             flash("Registration successful! Please log in.")
+            print("Registration successful")
             return redirect(url_for('login'))
         else:
             flash(result)
+            print("Registration failed")
             return redirect(url_for('register'))
     return render_template("register.html")
 
@@ -54,13 +73,15 @@ def login():
         password = request.form["password"]
         user = check_user_password(username, password)
         if user:
-            user_obj = User(user[0], user[1])
-            login_user(user_obj)
+            user_obj = User(user[0], user[1])  # Ensure user[0] is the ID and user[1] is the username
+            login_user(user_obj)  # Ensure this is being called correctly
+            print("Login successful")
             return redirect(url_for('index'))
         else:
             flash("Invalid username or password.")
             return redirect(url_for('login'))
     return render_template("login.html")
+
 
 @app.route("/logout")
 @login_required
@@ -69,8 +90,10 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route("/", methods=["GET", "POST"])
-# @login_required
+@login_required
 def index():
+    print(f"Current user: {current_user}")
+
     if request.method == "POST":
         header = request.form["header"]
         notat = request.form["notat"]
@@ -85,7 +108,10 @@ def index():
     return render_template("index.html", headers=headers)
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
+@login_required
 def edit(id):
+    print(f"Current user: {current_user}")
+
     if request.method == "POST":
         header = request.form["header"]
         notat = request.form["notat"]
@@ -101,9 +127,14 @@ def edit(id):
     return render_template("edit.html", notat_data=notat_data, headers=headers)
 
 @app.route("/delete/<int:id>", methods=["POST"])
+@login_required
 def delete(id):
     delete_notat(id)
     return redirect(url_for('index'))
+
+@app.route("/debug-session")
+def debug_session():
+    return f"Session: {session}"
 
 if __name__ == "__main__":
     app.run(debug=True)
