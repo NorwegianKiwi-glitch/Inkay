@@ -3,11 +3,18 @@
 {% block body %}
 
     <h2>Dine notater</h2>
+
+    {% if headers %}
     <ul>
-        {% for header in headers %}
-            <li><a href="{{ url_for('edit', id=header[0]) }}" class="hover:bg-blue-700">{{ header[1] }}</a></li>
-        {% endfor %}
+      {% for item in headers %}
+        <li>
+          <a href="{{ url_for('edit', id=item[0]) }}" class="hover:bg-blue-700">{{ item[1] }}</a>
+        </li>
+      {% endfor %}
     </ul>
+    {% else %}
+        <p>No headers available.</p>
+    {% endif %}
     
     <div class="max-w-sm mx-auto">
         <form action="/" method="post">

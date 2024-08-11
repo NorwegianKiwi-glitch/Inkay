@@ -103,6 +103,17 @@ def index():
             return redirect(url_for('index'))
 
         return redirect(url_for('index'))
+    
+    query = request.args.get('query', '').strip()
+
+    if query:
+        conn = create_connection()
+        c = conn.cursor()
+        c.execute("SELECT * FROM notater WHERE header LIKE ?", ('%' + query + '%',))
+        headers = c.fetchall()
+        conn.close()
+    else:
+        headers = get_all_headers()
 
     headers = get_all_headers()
     return render_template("index.html", headers=headers)
@@ -135,6 +146,24 @@ def delete(id):
 @app.route("/debug-session")
 def debug_session():
     return f"Session: {session}"
+
+@app.route("/search", methods=["GET"])
+@login_required
+def search():
+    query = request.args.get('query', '').strip()
+
+    if query:
+        conn = create_connection()
+        c = conn.cursor()
+        # Use the LIKE operator with wildcards
+        c.execute("SELECT * FROM notater WHERE header LIKE ?", ('%' + query + '%',))
+        results = c.fetchall()
+        conn.close()
+    else:
+        results = []
+    
+    print(results)
+    return render_template("search_results.html", results=results, query=query)
 
 if __name__ == "__main__":
     app.run(debug=True)
