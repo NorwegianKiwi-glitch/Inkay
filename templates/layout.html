@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <section class="bg-gray-50 dark:bg-gray-900">
     <!-- Navbar -->
     <nav class="bg-dracula border-blue-600 px-2 sm:px-4 py-2.5">
         <div class="container flex flex-wrap justify-between items-center mx-auto">
@@ -19,6 +20,7 @@
                     class="rounded-full" style="height: 25px; width: 25px" alt="" loading="lazy" />
                 <span class="self-center text-lg font-semibold whitespace-nowrap dark:text-white">InkayNote</span>
             </a>
+
             <!-- Search Form -->
             <form class="form-inline my-2 my-lg-0 ml-auto" method="GET" action="{{ url_for('search') }}">
                 <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search" aria-label="Search">
@@ -54,6 +56,7 @@
                 </ul>
             </div>
     </nav>
+    
 
     <!-- margin -->
     <div class="mx-8 mt-6">
@@ -67,6 +70,8 @@
             <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="https://github.com/NorwegianKiwi-glitch" class="hover:underline">Gaymer Gang Shelgen</a></span>
         </div>
     </footer>
+
+    </section>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 

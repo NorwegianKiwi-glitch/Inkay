@@ -1,28 +1,29 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
-    <h2>Dine notater</h2>
-
-    {% if headers %}
-    <ul>
-      {% for item in headers %}
-        <li>
-          <a href="{{ url_for('edit', id=item[0]) }}" class="hover:bg-blue-700">{{ item[1] }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-    {% else %}
-        <p>No headers available.</p>
-    {% endif %}
     
-    <div class="max-w-sm mx-auto">
-        <form action="/" method="post">
-            <input autocomplete="off" autofocus name="header" placeholder="Header" type="text">
-            <textarea name="notat" placeholder="Write your note here..." rows="4" cols="50"></textarea>
-            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Lagre</button>
-        </form>
-    </div>
+        <h2>Dine notater</h2>
+
+        {% if headers %}
+        <ul>
+        {% for item in headers %}
+            <li>
+            <a href="{{ url_for('edit', id=item[0]) }}" class="hover:bg-blue-700">{{ item[1] }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+        {% else %}
+            <p>No headers available.</p>
+        {% endif %}
+        
+        <div class="h-full">
+            <form action="/" method="post">
+                <input class="rounded-lg border" autocomplete="off" autofocus name="header" placeholder="Header" type="text">
+                <textarea rows="30" class="block p-2.5 w-full text-sm text-gray-900  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none" name="notat" placeholder="Write your note here..." ></textarea>
+                </br>
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Lagre</button>
+            </form>
+        </div>
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
